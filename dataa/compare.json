@@ -1,0 +1,14 @@
+{
+    "Paris": {
+        "temperature": 10.0,
+        "conditions": "Clear"
+    },
+    "London": {
+        "temperature": 13.0,
+        "conditions": "Light rain"
+    },
+    "New York": {
+        "temperature": 21.7,
+        "conditions": "Partly cloudy"
+    }
+}
