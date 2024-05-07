@@ -10,34 +10,69 @@ def sauvegarder_donneesCurrentComp_json(donnees, nom_fichier, dossier):
         donnees (dict): Les données à sauvegarder.
         nom_fichier (str): Le nom du fichier JSON de sortie.
     """
+    # Chemin complet du fichier JSON
     chemin = os.path.join(dossier, nom_fichier)
     with open(chemin, "w") as json_file:
+        # Écrit les données au format JSON avec indentation
         json.dump(donnees, json_file, indent=4)
 
 def get_current_weather(city, api_key):
+    """
+    Récupère les données météorologiques actuelles pour une ville donnée.
+
+    Args:
+        city (str): Le nom de la ville pour laquelle récupérer les données.
+        api_key (str): La clé d'API pour accéder aux données de l'API WeatherAPI.
+
+    Returns:
+        dict: Les données météorologiques actuelles pour la ville spécifiée.
+    """
+    # URL de l'API pour les données météorologiques actuelles
     url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}"
+    # Faire une requête GET pour obtenir les données
     response = requests.get(url)
+    # Vérifier si la requête a réussi
     if response.status_code == 200:
+        # Convertir la réponse en format JSON
         data = response.json()
-        
+        # Retourner les données météorologiques actuelles
         return data
     else:
+        # Si la requête échoue, afficher un message d'erreur
         print(f"Erreur lors de la récupération des données météorologiques pour {city}: {response.status_code}")
+        # Retourner None si les données météorologiques ne sont pas dispo
         return None
 
 def compare_weather(cities, api_key):
+    """
+    Compare les conditions météorologiques actuelles pour plusieurs villes.
+
+    Args:
+        cities (list): Une liste de noms de villes à comparer.
+        api_key (str): La clé d'API pour accéder aux données de l'API WeatherAPI.
+
+    Returns:
+        dict: Un dictionnaire contenant les données météorologiques actuelles pour chaque ville comparée.
+    """
+    # Initialiser un dictionnaire pour stocker les données météorologiques
     weather_data = {}
+    # Parcourir chaque ville dans la liste
     for city in cities:
+        # Récupérer les données météorologiques actuelles pour la ville
         data = get_current_weather(city, api_key)
+        # Vérifier si les données sont disponibles
         if data:
+            # Ajouter les données au dictionnaire de comparaison
             weather_data[city] = {
                 "temperature": data["current"]["temp_c"],
                 "conditions": data["current"]["condition"]["text"]
             }
+            # Sauvegarder les données dans un fichier JSON
             sauvegarder_donneesCurrentComp_json(weather_data, "compare.json", "dataa")
+    # Retourner le dictionnaire contenant les données      
     return weather_data
 
-# Remplacez "YOUR_API_KEY" par votre clé API WeatherAPI
+# clé API WeatherAPI
 api_key = "61064c6295144de9b63101812242904"
 
 # Liste des villes à comparer

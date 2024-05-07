@@ -10,7 +10,8 @@ def sauvegarder_heures_soleil(data, nom_fichier):
         data (dict): Les données à sauvegarder.
         nom_fichier (str): Le nom du fichier JSON de sortie.
     """
-    chemin = os.path.join("dataa", nom_fichier)  # Chemin du fichier dans le dossier "dataa"
+    # Chemin du fichier dans le dossier "dataa"
+    chemin = os.path.join("dataa", nom_fichier)  
     with open(chemin, "w") as json_file:
         json.dump(data, json_file, indent=4)
 
@@ -26,19 +27,27 @@ def get_sunrise_sunset(city, api_key):
         str: L'heure du lever du soleil.
         str: L'heure du coucher du soleil.
     """
+    # URL de l'API pour les données astronomiques
     url = f"http://api.weatherapi.com/v1/astronomy.json?key={api_key}&q={city}"
+    # Faire une requête GET pour obtenir les données astronomiques
     response = requests.get(url)
+    # Vérifier si la requête a réussi
     if response.status_code == 200:
+        # Convertir la réponse en format JSON
         data = response.json()
+        # Récupérer les données d'astronomie
         astronomy_data = data.get("astronomy", {})
+        # Vérifier si les données d'astronomie sont présentes
         if astronomy_data:
             sunrise = astronomy_data["astro"]["sunrise"]
             sunset = astronomy_data["astro"]["sunset"]
             # Sauvegarde des données dans un fichier JSON
             sauvegarder_heures_soleil({"sunrise": sunrise, "sunset": sunset}, "sunrise_sunset.json")
+            # Retourner les heures de lever et de coucher du soleil
             return sunrise, sunset
     else:
         print(f"Erreur lors de la récupération des données astronomiques: {response.status_code}")
+        # Retourner None pour chaque heure de lever et de coucher du soleil
         return None, None
 
 # Clé d'API et nom de la ville pour lesquels récupérer les données astronomiques
@@ -48,7 +57,7 @@ city = "london"
 # Appel à la fonction get_sunrise_sunset pour récupérer les heures de lever et de coucher du soleil
 sunrise, sunset = get_sunrise_sunset(city, api_key)
 
-# Affichage des heures de lever et de coucher du soleil si elles sont disponibles
+# Affichage des heures de lever et de coucher du soleil si sont dispo
 if sunrise is not None:
     print(f"Heure du lever du soleil à {city}: {sunrise}")
     print(f"Heure du coucher du soleil à {city}: {sunset}")
