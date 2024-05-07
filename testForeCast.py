@@ -10,6 +10,6 @@ def test_get_weather_forecast():
     assert len(forecast_data) == days
 
     # Test case 2 vérifie si la fonction retourne une liste vide pour une ville inexistante
-    city = "NonExistentCity"
+    city = "malom"
     forecast_data = get_weather_forecast(city, api_key, days)
     assert forecast_data == []
